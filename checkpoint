@@ -1,0 +1,3 @@
+model_checkpoint_path: "lenet_config17"
+all_model_checkpoint_paths: "lenet_config18"
+all_model_checkpoint_paths: "lenet_config17"
