@@ -5,6 +5,7 @@
 [image2]: ./examples/grayscale.jpg "Grayscaling"
 [image3]: ./examples/random_noise.jpg "Random Noise"
 
+
 [image13]: ./new_data/1.png "Traffic Sign 1"
 [image14]: ./new_data/2.png "Traffic Sign 2"
 [image15]: ./new_data/3.png "Traffic Sign 3"
@@ -13,6 +14,10 @@
 [image18]: ./new_data/6.png "Traffic Sign 6"
 [image19]: ./new_data/7.png "Traffic Sign 7"
 [image20]: ./new_data/8.png "Traffic Sign 8"
+[image21]: ./new_data/new_world_set.png "Traffic Sign 9"
+[image23]: ./new_data/new_test_world_result.png "Traffic Sign 11"
+[image24]: ./images/data_visualization.png "Visualization"
+[image25]: ./images/data_visualization_after.png "Visualization After"
 
 [image9]: ./images/rotation.png "Augment Example 1"
 [image10]: ./images/rotation2.png "Augment Example 2"
@@ -22,9 +27,9 @@
 
 ### Writeup / README
 
-One can find the HTML output of my iPython notebook in  the following link: 
-[comment]: <TODO here update projeect code >
-You're reading it! and here is a link to my [project code](https://github.com/udacity/CarND-Traffic-Sign-Classifier-Project/blob/master/Traffic_Sign_Classifier.ipynb)
+HTML output of ipython notebook can be found in following link:  [link](https://github.com/enienws/CarND-Traffic-Sign-Classifier-Project/blob/master/Traffic_Sign_Classifier.ipynb)
+Additionally [project code](https://github.com/enienws/CarND-Traffic-Sign-Classifier-Project/blob/master/Traffic_Sign_Classifier.ipynb) can be found on this link.
+I forked the original CarND-Traffic-Sign-Classifier-Project and make the modifications in my forked repository. Every work including  trained models, images and this markdown file can be found in this repository.
 
 ### Data Set Summary & Exploration
 
@@ -41,9 +46,9 @@ signs data set:
 
 #### 2. Include an exploratory visualization of the dataset.
 
-Here is an exploratory visualization of the data set. It is a bar chart showing how the data ...
+I plotted total samples vs. classes graph. As one can easily note, there are huge differences between total samples belonging to different classes. This may hurt the performance of trained model, since model tends to learn better some classes. I will work on balancing data between classes on pre processing section. Detailed work can be found in related section. 
 
-![alt text][image1]
+![alt text][image24]
 
 ### Design and Test a Model Architecture
 
@@ -65,8 +70,14 @@ Below an example can be found for color to grayscale conversion result:
 
 After augmentation of data new samples for classes is given in the following list:
 1260 1980 2010 1260 1770 1650 1800 1290 1260 1320 1800 1170 1890 1920  690 1620 1800  990 1080 1260 1500 1350 1650 1350 1680 1350 1620 1470 1440 1680 1950  690 1470 1797 1800 1080 1650 1260 1860 1350 1500 1470 1470
+
+Moreover data visualization is found on previous section.
+
  Before augmentation samples for separate classes are given in following list:
 180 1980 2010 1260 1770 1650  360 1290 1260 1320 1800 1170 1890 1920  690 540  360  990 1080  180  300  270  330  450  240 1350  540  210  480  240 390  690  210  599  360 1080  330  180 1860  270  300  210  210
+The visulization graph after data augmentation is found below image. It seems better however some more work needed here. 
+
+![alt text][image25]
 
 It can be seen that, before augmentation sample count difference between classes is much more striking. 
 
@@ -121,7 +132,7 @@ The following table summarizes all tried configurations:
 | 13 	| Augmented, Grayscale, SimplePreprocess 	| 512 	| 200 	| 0.0001 	| 2 	| 0.877 	|
 | 14 	| Augmented, SimplePreprocess 	| 512 	| 200 	| 0.0001 	| 3 	| 0.895 	|
 | 15 	| SimplePreprocess 	| 512 	| 200 	| 0.001 	| 3 	| 0.920 	|
-| 16 	| SimplePreprocess 	| 512 	| 200 	| 0.001 	| 4 	| 0.950 	|
+| 16, 18	| SimplePreprocess 	| 512 	| 200 	| 0.001 	| 4 	| 0.950 	|
 | 17 	| Augmented, SimplePreprocess 	| 512 	| 200 	| 0.001 	| 4 	| 0.942 	|
 
 
@@ -165,7 +176,7 @@ First of all for all images that can be problem for the classifier that the inpu
 
 Here are the results of the prediction:
 
-| Image Class			        |     Prediction Class	        					| 
+| Image Class			        |     Prediction Class | 
 |:---------------------:|:---------------------------------------------:| 
 | 3      		| 3   									| 
 | 38     			| 38 										|
@@ -178,24 +189,53 @@ Here are the results of the prediction:
 
 The column on the left classes of input images and the column on the right holds the predicted classes for the given images. A simple function is coded in notebook in order to calculate the accuracy of the test. Since all the predicted classes are correct for these 8 images one cay claim that accuracy is 100%.
 
+I have decided to try another world test set.  The images can be seen below:
+
+![alt text][image21]
+
+The prediction classes are:
+
+![alt text][image23]
+
+Here one evaluates the accuracy as: 
+Accuracy = 5 / 9 = 0,55
+
+However again classifier outputs very strong results, this situation will be discussed in next section. 
+
+
 #### 3. Describe how certain the model is when predicting on each of the five new images by looking at the softmax probabilities for each prediction. Provide the top 5 softmax probabilities for each image along with the sign type of each probability. (OPTIONAL: as described in the "Stand Out Suggestions" part of the rubric, visualizations can also be provided such as bar charts)
 
 
-| Prediction Probability         	|     Prediction Class       					|
-|:---------------------:|:---------------------------------------------:| 
-| 1.0       			| 3   									| 
-| 1.0     				| 38 										|
-| 1.0					| 11											|
-| 1.0	      			| 34					 				|
-| 1.0				    | 1      							|
-| 1.0				    | 18      							|
-| 1.0				    | 12      							|
-| 1.0				    | 25      							|
+| Prediction Probability         	|     Prediction Class       					| 2nd pred prob | 3rd pred prob | 4th pred prob | 5th pred prob |
+|:---------------------:|:---------------------------------------------:|:---------------------:|:---------------------:|:---------------------:|:---------------------:|
+| 9.99423265e-01       			| 3 | 4.23493650e-04 | 4.85798591e-05 | 4.75823035e-05 |   4.57842034e-05 |
+| 1.00000000e+00    				| 38 | 1.17224002e-15 | 3.29172678e-18 | 2.88525850e-18  | 4.98181777e-19 |
+| 1.00000000e+00					| 11	| 5.00808284e-08 |   2.08032502e-09 | 6.90515492e-11 |   4.28188596e-11 |
+| 1.00000000e+00	      			| 34| 2.94839869e-12 | 1.37637308e-12 | 4.08676006e-16 |  1.05464370e-16 |
+| 9.99904990e-01				    | 1| 9.14954144e-05 |   1.50227368e-06 | 7.20539731e-07 | 7.14688269e-07 |
+| 1.00000000e+00			    | 18	|  4.19746948e-09 |  1.28743847e-12 | 5.54263558e-13 | 3.26915415e-13 |
+| 1.00000000e+00				    | 12| 1.00818822e-13 |  7.50035478e-14 | 4.49237205e-14 |  2.02623071e-14 |
+| 9.78318632e-01			    | 25 | 1.64712500e-02 | 5.12215029e-03 | 7.09153755e-05 | 1.17992713e-05 |
 
 
-It is very strange to get 1.0 percent of softmax outputs as top_k results....
+It is very strange to get nearly 1.0 percent of softmax outputs. So have decided to try another world test dataset. Below images are selected from web in order to test the model. The new dataset is same as second dataset discussed in previous section. The following table shows the classifier results: 
 
-### (Optional) Visualizing the Neural Network (See Step 4 of the Ipython notebook for more details)
-#### 1. Discuss the visual output of your trained network's feature maps. What characteristics did the neural network use to make classifications?
+![alt text][image23]
 
+In this test, results seem more reasonable. Because,  classifier does not output strong probabilities that classifies wrong. Following table explains the results: 
 
+| Prediction Probability         	|     Prediction Class       					| 2nd pred prob | 3rd pred prob | 4th pred prob | 5th pred prob |
+|:---------------------:|:---------------------------------------------:|:---------------------:|:---------------------:|:---------------------:|:---------------------:|
+| 9.99303222e-01       			| 25 | 5.37821674e-04 | 1.53720946e-04 | 3.15596344e-06 | 1.87519652e-06 |
+| 1.00000000e+00     				| 17 	|1.10890304e-10 | 5.90167498e-11 | 1.73156003e-11 | 9.85106528e-13 |
+| 7.40100503e-01					| 40	|2.51446068e-01 | 6.16378477e-03 | 2.19199201e-03 | 2.37040567e-05 |
+| 9.99999881e-01	      			| 14| 1.55160549e-07 | 9.65049196e-09 | 1.90187532e-09 | 1.55462920e-10 |
+| 7.67329216e-01				    | 8 | 1.33771434e-01 | 3.47548313e-02 | 3.40694375e-02 | 2.80069839e-02 |
+| 9.02192652e-01				    | 18 | 5.05776592e-02 | 4.65159602e-02 | 3.48630885e-04 | 1.67455204e-04 |
+| 9.95065391e-01				    | 25| 3.47388093e-03 | 1.10137637e-03 | 1.26148661e-04 | 9.26450739e-05 |
+| 9.58731055e-01				    | 25| 1.94614716e-02 | 1.11226775e-02 | 5.59002301e-03 | 4.68781311e-03 |
+| 9.99935031e-01				    | 14|3.53862706e-05 | 2.80956792e-05 | 9.60402531e-07 | 2.94951946e-07 |
+
+This test shows that, distribution of training set is so important. One should generate training set so that it should mimic the real data that will be fed to the model. The selected model for this example is not trained with augmented data so it is actually a mistake for me to choose a model that exceeds 0.93 test accuracy threshold however does not trained with augmented data. I think that, augmented data will much more mimic the real world test dataset. 
+
+Secondly, maybe the cropping of the second world dataset is problematic which causes a lower accuracy rate. Maybe cropping the dataset using the bounding boxes and then training a model will be much more accurate. Moreover I think that this model maybe perfom better on real test dataset. 
