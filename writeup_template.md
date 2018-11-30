@@ -170,7 +170,13 @@ Here are five German traffic signs that I found on the web:
 The source is past graduates of this nanodegree:
 http://jeremyshannon.com/2017/01/13/udacity-sdcnd-traffic-sign-classifier.html
 
-First of all for all images that can be problem for the classifier that the input images are not from the same distribution of training dataset. It is important to tune the distribution of training set to reflect the distribution of real world. 
+First of all for all images that can be problem for the classifier that the input images are not from the same distribution of training dataset. It is important to prepare a training set that reflects the real world test dataset. More formally, training and test dataset should be drawn from same distribution. 
+
+For example, if train dataset contains traffic signs that do not reflect the real world data, the classifier won't be able to perform well on real world data. Because classifier generalized a different kind of data. 
+
+As I have mentioned in first paragraph it is important to use train and test data drawn from similar distributions. So let me now discuss how data distribution changes with different properties of images. Changing of properties like brightness, clutter, orientation and scaling changes distribution of a data source. Hence we perform data preprocess in order to normalize data drawn from different sources. For example, brightness can cause a problem if a classifier is trained mostly with darker images but is testing with brighter images. However with a data preprocess phase in which mean subtraction is performing we make distributions of two datasets similar to each other. 
+
+Additionally different image resolutions and sizes does not affect the performance of classifier if high resolution images are being used. Since the input size of the neural network is 32x32, scaling input images to 32x32 does not affect performance. However, one should take care of not to change image aspect ratios (scaling) when scaling the image to 32x32.
 
 #### 2. Discuss the model's predictions on these new traffic signs and compare the results to predicting on the test set. At a minimum, discuss what the predictions were, the accuracy on these new predictions, and compare the accuracy to the accuracy on the test set (OPTIONAL: Discuss the results in more detail as described in the "Stand Out Suggestions" part of the rubric).
 
@@ -200,41 +206,47 @@ The prediction classes are:
 Here one evaluates the accuracy as: 
 Accuracy = 5 / 9 = 0,55
 
-However again classifier outputs very strong results, this situation will be discussed in next section. 
+When two tests are merged we got accuracy:
+Accuracy = 13 / 17 = 0.764
+
+which points to a 19.5% performance drop by using test data accuracy 0.950.
+
+Actually a 19.5% performance drop shows me that classifer perform bad when classifier is tested with data drawn from different data source. This may be a sign of unsufficient preprocess (normalization) process or train dataset does not generalize real world data set properly. So I think that the model is not highly confident to deal with much more images. 
 
 
 #### 3. Describe how certain the model is when predicting on each of the five new images by looking at the softmax probabilities for each prediction. Provide the top 5 softmax probabilities for each image along with the sign type of each probability. (OPTIONAL: as described in the "Stand Out Suggestions" part of the rubric, visualizations can also be provided such as bar charts)
 
 
-| Prediction Probability         	|     Prediction Class       					| 2nd pred prob | 3rd pred prob | 4th pred prob | 5th pred prob |
-|:---------------------:|:---------------------------------------------:|:---------------------:|:---------------------:|:---------------------:|:---------------------:|
-| 9.99423265e-01       			| 3 | 4.23493650e-04 | 4.85798591e-05 | 4.75823035e-05 |   4.57842034e-05 |
-| 1.00000000e+00    				| 38 | 1.17224002e-15 | 3.29172678e-18 | 2.88525850e-18  | 4.98181777e-19 |
-| 1.00000000e+00					| 11	| 5.00808284e-08 |   2.08032502e-09 | 6.90515492e-11 |   4.28188596e-11 |
-| 1.00000000e+00	      			| 34| 2.94839869e-12 | 1.37637308e-12 | 4.08676006e-16 |  1.05464370e-16 |
-| 9.99904990e-01				    | 1| 9.14954144e-05 |   1.50227368e-06 | 7.20539731e-07 | 7.14688269e-07 |
-| 1.00000000e+00			    | 18	|  4.19746948e-09 |  1.28743847e-12 | 5.54263558e-13 | 3.26915415e-13 |
-| 1.00000000e+00				    | 12| 1.00818822e-13 |  7.50035478e-14 | 4.49237205e-14 |  2.02623071e-14 |
-| 9.78318632e-01			    | 25 | 1.64712500e-02 | 5.12215029e-03 | 7.09153755e-05 | 1.17992713e-05 |
+| 1st Prediction Prob & Class         	| 2nd Prediction Prob & Class | 3rd Prediction Prob & Class | 4th Prediction Prob & Class | 5th Prediction Prob & Class |
+|:---------------------:|:---------------------:|:---------------------:|:---------------------:|:---------------------:|
+| 9.99423265e-01 & 3       	| 4.23493650e-04 & 5 | 4.85798591e-05 & 2 | 4.75823035e-05 & 31 |   4.57842034e-05 & 10 |
+| 1.00000000e+00 & 38    	 | 1.17224002e-15 & 25 | 3.29172678e-18 & 13 | 2.88525850e-18 & 36  | 4.98181777e-19 & 1 |
+| 1.00000000e+00 & 11	| 5.00808284e-08 & 30 |   2.08032502e-09 & 28 | 6.90515492e-11 & 25 |   4.28188596e-11 & 27 |
+| 1.00000000e+00 & 34	| 2.94839869e-12 & 38 | 1.37637308e-12 & 35 | 4.08676006e-16 & 13 |  1.05464370e-16 & 36 |
+| 9.99904990e-01 & 1	| 9.14954144e-05 & 2 |   1.50227368e-06 & 7 | 7.20539731e-07 & 5 | 7.14688269e-07 & 0 |
+| 1.00000000e+00 & 18	|  4.19746948e-09 & 26 |  1.28743847e-12 & 15 | 5.54263558e-13 & 24 | 3.26915415e-13 & 29 |
+| 1.00000000e+00 & 12	| 1.00818822e-13 & 42 |  7.50035478e-14 & 40 | 4.49237205e-14 & 32 |  2.02623071e-14 & 26 |
+| 9.78318632e-01 & 25	| 1.64712500e-02 & 1 | 5.12215029e-03 & 5 | 7.09153755e-05 & 4 | 1.17992713e-05 & 14 |
 
 
-It is very strange to get nearly 1.0 percent of softmax outputs. So have decided to try another world test dataset. Below images are selected from web in order to test the model. The new dataset is same as second dataset discussed in previous section. The following table shows the classifier results: 
+Above in the table top 5 softmax outputs for each image. Softmax outputs class predictions for each class and sum of each probability for class of an image equals to one. 
+
+The second test dataset is shown in image below:
 
 ![alt text][image23]
 
-In this test, results seem more reasonable. Because,  classifier does not output strong probabilities that classifies wrong. Following table explains the results: 
 
-| Prediction Probability         	|     Prediction Class       					| 2nd pred prob | 3rd pred prob | 4th pred prob | 5th pred prob |
-|:---------------------:|:---------------------------------------------:|:---------------------:|:---------------------:|:---------------------:|:---------------------:|
-| 9.99303222e-01       			| 25 | 5.37821674e-04 | 1.53720946e-04 | 3.15596344e-06 | 1.87519652e-06 |
-| 1.00000000e+00     				| 17 	|1.10890304e-10 | 5.90167498e-11 | 1.73156003e-11 | 9.85106528e-13 |
-| 7.40100503e-01					| 40	|2.51446068e-01 | 6.16378477e-03 | 2.19199201e-03 | 2.37040567e-05 |
-| 9.99999881e-01	      			| 14| 1.55160549e-07 | 9.65049196e-09 | 1.90187532e-09 | 1.55462920e-10 |
-| 7.67329216e-01				    | 8 | 1.33771434e-01 | 3.47548313e-02 | 3.40694375e-02 | 2.80069839e-02 |
-| 9.02192652e-01				    | 18 | 5.05776592e-02 | 4.65159602e-02 | 3.48630885e-04 | 1.67455204e-04 |
-| 9.95065391e-01				    | 25| 3.47388093e-03 | 1.10137637e-03 | 1.26148661e-04 | 9.26450739e-05 |
-| 9.58731055e-01				    | 25| 1.94614716e-02 | 1.11226775e-02 | 5.59002301e-03 | 4.68781311e-03 |
-| 9.99935031e-01				    | 14|3.53862706e-05 | 2.80956792e-05 | 9.60402531e-07 | 2.94951946e-07 |
+| 1st Prediction Prob & Class | 2nd prediction Prob & Class | 3rd Prediction prob & Class | 4th prediction prob & Class | 5th prediction Prob & Class |
+|:---------------------:|:---------------------:|:---------------------:|:---------------------:|:---------------------:|
+| 9.99303222e-01 & 25   | 5.37821674e-04 & 22 | 1.53720946e-04 & 36 | 3.15596344e-06 & 13 | 1.87519652e-06 & 28 |
+| 1.00000000e+00 & 17  	|1.10890304e-10 & 20 | 5.90167498e-11 & 14 | 1.73156003e-11 & 18 | 9.85106528e-13 & 23 |
+| 7.40100503e-01 & 40	|2.51446068e-01 & 24| 6.16378477e-03 & 4 | 2.19199201e-03 & 1 | 2.37040567e-05 & 37 |
+| 9.99999881e-01 & 14	| 1.55160549e-07 & 1 | 9.65049196e-09 & 17 | 1.90187532e-09 & 13 | 1.55462920e-10 & 25 |
+| 7.67329216e-01 & 8	| 1.33771434e-01 & 0 | 3.47548313e-02 & 1 | 3.40694375e-02 & 2 | 2.80069839e-02 &9 |
+| 9.02192652e-01 & 18	| 5.05776592e-02 & 29 | 4.65159602e-02 & 25 | 3.48630885e-04 & 31 | 1.67455204e-04 & 24 |
+| 9.95065391e-01 & 25	| 3.47388093e-03 & 14| 1.10137637e-03 & 1 | 1.26148661e-04 & 5 | 9.26450739e-05 & 31 |
+| 9.58731055e-01 & 25	| 1.94614716e-02 & 28 | 1.11226775e-02 & 22 | 5.59002301e-03 & 10 | 4.68781311e-03 & 3 |
+| 9.99935031e-01 & 14	|3.53862706e-05 & 1| 2.80956792e-05 & 5 | 9.60402531e-07 & 25 | 2.94951946e-07 & 7 |
 
 This test shows that, distribution of training set is so important. One should generate training set so that it should mimic the real data that will be fed to the model. The selected model for this example is not trained with augmented data so it is actually a mistake for me to choose a model that exceeds 0.93 test accuracy threshold however does not trained with augmented data. I think that, augmented data will much more mimic the real world test dataset. 
 
